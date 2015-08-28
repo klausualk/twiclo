@@ -11,8 +11,12 @@ Template.tweetBox.events({
   var tweet = $('#tweetText').val();
   $('#tweetText').val("");
   Session.set('numChars', 0);
-  Tweets.insert({message: tweet});
-}
+  if (Meteor.user()){
+  Tweets.insert({message: tweet, user: Meteor.user().username});
+}}
+
+
+
 });
 
 Template.tweetBox.helpers({  
@@ -30,7 +34,9 @@ Template.tweetBox.helpers({
 
   disableButton: function() {
     if (Session.get('numChars') <= 0 ||
-        Session.get('numChars') > 140) {
+        Session.get('numChars') > 140 || 
+        !Meteor.user())
+    {
       return 'disabled';
     }
   }
